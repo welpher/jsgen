@@ -87,14 +87,19 @@ body > div {
     background: url(../img/loading.gif) no-repeat center center;
 }
 
+.pure-g-r img {
+    height: auto;
+    max-width: 100%;
+}
+
 .pure-u-1-4 {
-    width: 24.8%;
+    width: 24%;
 }
 .pure-u-1-3 {
-    width: 33.2%;
+    width: 32.5%;
 }
 .pure-u-1-2 {
-    width: 49.9%;
+    width: 49.5%;
 }
 .pure-table {
     border: none;
@@ -1053,11 +1058,6 @@ ol.inner {
     margin-right: auto;
     margin-left: auto;
 }
-.wrap:before,
-.wrap:after {
-    display: table;
-    content: " ";
-}
 .wrap {
     max-width: 1080px;
 }
@@ -1187,6 +1187,18 @@ input.upload-input {
     background-size: 100%;
     background-repeat:no-repeat;
     background-position: center;
+}
+
+.site-link ul {
+  list-style: none;
+}
+
+.site-link li {
+  margin: 10px 0;
+}
+
+.site-link img {
+  height: 44px;
 }
 
 @media (min-width: 980px) {

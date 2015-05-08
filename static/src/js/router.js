@@ -1,10 +1,11 @@
 'use strict';
-/*global angular, jsGenVersion*/
+/*global angular, jsGen*/
 
-angular.module('jsGen.router', ['ngRoute']).
-constant('app', {
+jsGen
+.constant('app', {
     version: Date.now()
-}).provider('getFile', ['app',
+})
+.provider('getFile', ['app',
     function (app) {
         this.html = function (fileName) {
             return '/static/tpl/' + fileName + '?v=' + app.version;
@@ -19,51 +20,52 @@ constant('app', {
             };
         };
     }
-]).config(['$routeProvider', '$locationProvider', 'getFileProvider',
+])
+.config(['$routeProvider', '$locationProvider',
 
-    function ($routeProvider, $locationProvider, getFileProvider) {
+    function ($routeProvider, $locationProvider) {
         var index = {
-            templateUrl: getFileProvider.html('index.html'),
+            templateUrl: 'index.html',
             controller: 'indexCtrl'
         },
             login = {
-                templateUrl: getFileProvider.html('login.html'),
+                templateUrl: 'login.html',
                 controller: 'userLoginCtrl'
             },
             register = {
-                templateUrl: getFileProvider.html('register.html'),
+                templateUrl: 'register.html',
                 controller: 'userRegisterCtrl'
             },
             home = {
-                templateUrl: getFileProvider.html('user.html'),
+                templateUrl: 'user.html',
                 controller: 'homeCtrl'
             },
             admin = {
-                templateUrl: getFileProvider.html('admin.html'),
+                templateUrl: 'admin.html',
                 controller: 'adminCtrl'
             },
             edit = {
-                templateUrl: getFileProvider.html('article-editor.html'),
+                templateUrl: 'article-editor.html',
                 controller: 'articleEditorCtrl'
             },
             tag = {
-                templateUrl: getFileProvider.html('index.html'),
+                templateUrl: 'index.html',
                 controller: 'tagCtrl'
             },
             reset = {
-                templateUrl: getFileProvider.html('reset.html'),
+                templateUrl: 'reset.html',
                 controller: 'userResetCtrl'
             },
             user = {
-                templateUrl: getFileProvider.html('user.html'),
+                templateUrl: 'user.html',
                 controller: 'userCtrl'
             },
             article = {
-                templateUrl: getFileProvider.html('article.html'),
+                templateUrl: 'article.html',
                 controller: 'articleCtrl'
             },
             collection = {
-                templateUrl: getFileProvider.html('collection.html'),
+                templateUrl: 'collection.html',
                 controller: 'collectionCtrl'
             };
         $routeProvider.

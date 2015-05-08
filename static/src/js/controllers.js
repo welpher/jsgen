@@ -1,8 +1,8 @@
 'use strict';
-/*global angular*/
+/*global angular, jsGen*/
 
-angular.module('jsGen.controllers', ['ui.validate']).
-controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
+jsGen
+.controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
     function (app, $scope, $routeParams, getList) {
         var ID = '',
             restAPI = app.restAPI.article,
@@ -45,7 +45,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
 
         global.title2 = global.description;
         $scope.parent = {
-            getTpl: app.getFile.html('index-article.html'),
+            getTpl: 'index-article.html',
             viewPath: 'latest',
             sumModel: myConf.sumModel(null, 'index', false)
         };
@@ -64,12 +64,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
         getList('comment').then(function (data) {
             data = app.union(data.data);
             app.each(data, function (x, i) {
-                x.content = app.filter('cutText')(app.trim(x.content, true), 180);
+                x.content = app.filter('cutText')(x.content, 180);
             });
             $scope.hotComments = data.slice(0, 6);
         });
     }
-]).controller('tagCtrl', ['app', '$scope', '$routeParams', 'getList',
+])
+.controller('tagCtrl', ['app', '$scope', '$routeParams', 'getList',
     function (app, $scope, $routeParams, getList) {
         var restAPI = app.restAPI.tag,
             myConf = app.myConf,
@@ -80,7 +81,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
 
         app.rootScope.global.title2 = app.locale.TAG.title;
         $scope.parent = {
-            getTpl: app.getFile.html('index-tag.html')
+            getTpl: 'index-tag.html'
         };
         $scope.pagination = {};
 
@@ -96,12 +97,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
         getList('comment').then(function (data) {
             data = app.union(data.data);
             app.each(data, function (x, i) {
-                x.content = app.filter('cutText')(app.trim(x.content, true), 180);
+                x.content = app.filter('cutText')(x.content, 180);
             });
             $scope.hotComments = data.slice(0, 6);
         });
     }
-]).controller('userLoginCtrl', ['app', '$scope',
+])
+.controller('userLoginCtrl', ['app', '$scope',
     function (app, $scope) {
         app.clearUser();
         app.rootScope.global.title2 = app.locale.USER.login;
@@ -137,7 +139,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             }
         };
     }
-]).controller('userResetCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('userResetCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var timing,
             locale = app.locale;
@@ -160,7 +163,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             request: $routeParams.req
         };
         $scope.parent = {
-            title: locale.RESET[$routeParams.req],
+            title: locale.RESET[$routeParams.type],
             timing: 5
         };
         $scope.timingModal = {
@@ -187,7 +190,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 });
             }
         };
-        if (['locked', 'passwd'].indexOf($routeParams.req) < 0) {
+        if (['locked', 'passwd'].indexOf($routeParams.type) < 0) {
             app.restAPI.user.get({
                 ID: 'reset',
                 OP: $routeParams.req
@@ -199,7 +202,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             }, showModal);
         }
     }
-]).controller('userRegisterCtrl', ['app', '$scope',
+])
+.controller('userRegisterCtrl', ['app', '$scope',
     function (app, $scope) {
         var filter = app.filter,
             lengthFn = filter('length'),
@@ -244,7 +248,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             }
         };
     }
-]).controller('homeCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('homeCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var global = app.rootScope.global;
 
@@ -271,12 +276,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
         global.title2 = app.locale.HOME.title;
         $scope.user = global.user;
         $scope.parent = {
-            getTpl: app.getFile.html(tplName($routeParams.OP)),
+            getTpl: tplName($routeParams.OP),
             isMe: true,
             viewPath: $routeParams.OP || 'index'
         };
     }
-]).controller('userCtrl', ['app', '$scope', '$routeParams', 'getUser',
+])
+.controller('userCtrl', ['app', '$scope', '$routeParams', 'getUser',
     function (app, $scope, $routeParams, getUser) {
 
         function tplName() {
@@ -292,7 +298,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
 
         app.rootScope.global.title2 = app.locale.USER.title;
         $scope.parent = {
-            getTpl: app.getFile.html(tplName()),
+            getTpl: tplName(),
             isMe: false,
             viewPath: $routeParams.OP || 'index'
         };
@@ -302,7 +308,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             app.rootScope.global.title2 = $scope.user.name + app.locale.USER.title;
         });
     }
-]).controller('userListCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('userListCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var restAPI = app.restAPI.user,
             myConf = app.myConf,
@@ -335,7 +342,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             $scope.userList = data.data;
         });
     }
-]).controller('userArticleCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('userArticleCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var restAPI = app.restAPI.user,
             myConf = app.myConf,
@@ -387,7 +395,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 app.restAPI.article.remove({
                     ID: article._id
                 }, function () {
-                    app.some($scope.articleList, function (x, i, list) {
+                    app.findItem($scope.articleList, function (x, i, list) {
                         if (x._id === article._id) {
                             list.splice(i, 1);
                             app.toast.success(locale.ARTICLE.removed + article.title, locale.RESPONSE.success);
@@ -419,7 +427,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
 
         getArticleList();
     }
-]).controller('userEditCtrl', ['app', '$scope',
+])
+.controller('userEditCtrl', ['app', '$scope',
     function (app, $scope) {
         var originData = {},
             tagsArray = [],
@@ -497,6 +506,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 } else {
                     if (data.passwd) {
                         data.passwd = app.CryptoJS.SHA256(data.passwd).toString();
+                        data.passwd = app.CryptoJS.HmacSHA256(data.passwd, 'jsGen').toString();
                     }
                     if (data.email) {
                         app.restAPI.user.save({
@@ -527,7 +537,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
         });
         initUser();
     }
-]).controller('articleCtrl', ['app', '$scope', '$routeParams', 'mdEditor', 'getList', 'getMarkdown',
+])
+.controller('articleCtrl', ['app', '$scope', '$routeParams', 'mdEditor', 'getList', 'getMarkdown',
     function (app, $scope, $routeParams, mdEditor, getList, getMarkdown) {
         var ID = 'A' + $routeParams.ID,
             myConf = app.myConf,
@@ -553,13 +564,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 return;
             }
             article.isAuthor = _id === article.author._id;
-            article.isMark = app.some(article.markList, function (x) {
+            article.isMark = !!app.findItem(article.markList, function (x) {
                 return x._id === _id;
             });
-            article.isFavor = app.some(article.favorsList, function (x) {
+            article.isFavor = !!app.findItem(article.favorsList, function (x) {
                 return x._id === _id;
             });
-            article.isOppose = app.some(article.opposesList, function (x) {
+            article.isOppose = !!app.findItem(article.opposesList, function (x) {
                 return x._id === _id;
             });
             app.each(article.commentsList, function (x) {
@@ -610,7 +621,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 app.restAPI.article.remove({
                     ID: comment._id
                 }, function () {
-                    app.some($scope.article.commentsList, function (x, i, list) {
+                    app.findItem($scope.article.commentsList, function (x, i, list) {
                         if (x._id === comment._id) {
                             list.splice(i, 1);
                             $scope.article.comments = list.length;
@@ -729,7 +740,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                     if (article.isMark) {
                         article.markList.push(user);
                     } else {
-                        app.removeItem(user, '_id', article.markList);
+                        app.removeItem(article.markList, user._id);
                     }
                     app.toast.success(locale.ARTICLE[article.isMark ? 'marked' : 'unmarked']);
                 });
@@ -746,10 +757,10 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                     article.isFavor = !article.isFavor;
                     if (article.isFavor) {
                         article.favorsList.push(user);
-                        app.removeItem(user, '_id', article.opposesList);
+                        app.removeItem(article.opposesList, user._id);
                         article.isOppose = false;
                     } else {
-                        app.removeItem(user, '_id', article.favorsList);
+                        app.removeItem(article.favorsList, user._id);
                     }
                     app.toast.success(locale.ARTICLE[article.isFavor ? 'favored' : 'unfavored']);
                 });
@@ -766,10 +777,10 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                     article.isOppose = !article.isOppose;
                     if (article.isOppose) {
                         article.opposesList.push(user);
-                        app.removeItem(user, '_id', article.favorsList);
+                        app.removeItem(article.favorsList, user._id);
                         article.isFavor = false;
                     } else {
-                        app.removeItem(user, '_id', article.opposesList);
+                        app.removeItem(article.opposesList, user._id);
                     }
                     app.toast.success(locale.ARTICLE[article.isOppose ? 'opposed' : 'unopposed']);
                 });
@@ -789,7 +800,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                     article.comments += 1;
                     article.updateTime = Date.now();
                     if (replyToComment) {
-                        app.some(article.commentsList, function (x, i, list) {
+                        app.findItem(article.commentsList, function (x, i, list) {
                             if (replyToComment === x._id) {
                                 x.commentsList.push(comment._id);
                                 return true;
@@ -854,7 +865,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             $scope.hotArticles = data.data.slice(0, 10);
         });
     }
-]).controller('articleEditorCtrl', ['app', '$scope', '$routeParams', 'mdEditor', 'getMarkdown',
+])
+.controller('articleEditorCtrl', ['app', '$scope', '$routeParams', 'mdEditor', 'getMarkdown',
     function (app, $scope, $routeParams, mdEditor, getMarkdown) {
         var oldArticle,
             ID = $routeParams.ID && 'A' + $routeParams.ID,
@@ -945,7 +957,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             var length = lengthFn(model.$value);
             $scope.parent.titleBytes = length;
             if ($scope.parent.wmdPreview) {
-                $scope.parent.title = locale.ARTICLE.preview + app.sanitize(app.trim(model.$value), 0);
+                $scope.parent.title = locale.ARTICLE.preview + app.sanitize(model.$value, 0);
             }
             return length >= global.TitleMinLen;
         };
@@ -985,7 +997,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             var data = app.union($scope.article);
             if (app.validate($scope)) {
                 if (app.checkDirty(article, originData, data)) {
-                    data.title = app.sanitize(app.trim(data.title), 0);
+                    data.title = app.sanitize(data.title, 0);
                     restAPI.save({
                         ID: ID || 'index',
                         OP: ID && 'edit'
@@ -1029,7 +1041,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             initArticle();
         }
     }
-]).controller('adminCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('adminCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var global = app.rootScope.global,
             path = $routeParams.OP || 'index';
@@ -1044,12 +1057,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
         }
 
         $scope.parent = {
-            getTpl: app.getFile.html(tplName(path)),
+            getTpl: tplName(path),
             viewPath: path
         };
         global.title2 = app.locale.ADMIN[path];
     }
-]).controller('adminUserCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('adminUserCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var originData = {},
             restAPI = app.restAPI.user,
@@ -1111,7 +1125,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                     }, function (data) {
                         var updated = [];
                         app.each(data.data, function (x) {
-                            app.some($scope.userList, function (y) {
+                            app.findItem($scope.userList, function (y) {
                                 if (x._id === y._id) {
                                     app.union(y, x);
                                     updated.push(x.name);
@@ -1137,7 +1151,8 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             initUserList(data.data);
         });
     }
-]).controller('adminTagCtrl', ['app', '$scope', '$routeParams',
+])
+.controller('adminTagCtrl', ['app', '$scope', '$routeParams',
     function (app, $scope, $routeParams) {
         var originData = {},
             restAPI = app.restAPI.tag,
@@ -1174,7 +1189,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                 restAPI.remove({
                     ID: tag._id
                 }, function () {
-                    app.some($scope.tagList, function (x, i, list) {
+                    app.findItem($scope.tagList, function (x, i, list) {
                         if (x._id === tag._id) {
                             list.splice(i, 1);
                             app.toast.success(locale.TAG.removed + tag.tag, locale.RESPONSE.success);
@@ -1227,7 +1242,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                         app.each(data, function (x) {
                             var tag = result.data[x._id];
                             if (!tag) {
-                                app.some($scope.tagList, function (y, i, list) {
+                                app.findItem($scope.tagList, function (y, i, list) {
                                     if (x._id === y._id) {
                                         list.splice(i, 1);
                                         return true;
@@ -1236,7 +1251,7 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
                             }
                         });
                         app.each(result.data, function (x) {
-                            app.some($scope.tagList, function (y, i, list) {
+                            app.findItem($scope.tagList, function (y, i, list) {
                                 if (x._id === y._id) {
                                     app.union(y, x);
                                     updated.push(x.tag);
@@ -1263,11 +1278,13 @@ controller('indexCtrl', ['app', '$scope', '$routeParams', 'getList',
             initTagList(data.data);
         });
     }
-]).controller('adminArticleCtrl', ['app', '$scope',
+])
+.controller('adminArticleCtrl', ['app', '$scope',
     function (app, $scope) {
 
     }
-]).controller('adminGlobalCtrl', ['app', '$scope',
+])
+.controller('adminGlobalCtrl', ['app', '$scope',
     function (app, $scope) {
         var globalTpl,
             originData = {},
